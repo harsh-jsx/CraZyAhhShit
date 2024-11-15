@@ -2,10 +2,22 @@ import React from "react";
 import { useEffect } from "react";
 import { auth, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import { getDoc, collection, where } from "firebase/firestore";
 
 const Home = () => {
   const [user, loading, error] = useAuthState(auth);
 
+  const userQuery = async () => {
+    const UserCollectionRef = collection(db, "users1");
+    const query = UserCollectionRef(where("UserEmail" === user.email));
+    console.log(query);
+  };
+
+  useEffect(() => {
+    userQuery();
+  });
+
+  let lund = undefined;
   return (
     <>
       {loading ? (
@@ -15,7 +27,11 @@ const Home = () => {
           <div className="container">
             {user ? (
               <>
-                <h1>{user.email}</h1>
+                {user.emailVerified ? (
+                  <h1>{user?.email}</h1>
+                ) : (
+                  <h1>Please verify your email first.</h1>
+                )}
               </>
             ) : (
               <>
