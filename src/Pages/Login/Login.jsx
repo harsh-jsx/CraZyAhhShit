@@ -3,6 +3,7 @@ import { auth } from "../../firebase";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  signInWithEmailAndPassword,
 } from "firebase/auth";
 import { useNavigate } from "react-router-dom";
 
@@ -41,6 +42,20 @@ const Login = () => {
       console.log(e);
     }
   };
+
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    const email = e.target[0].value;
+    const password = e.target[1].value;
+    try {
+      signInWithEmailAndPassword(auth, email, password).then(() => {
+        navigate("/");
+      });
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   return (
     <>
       <button
@@ -51,12 +66,21 @@ const Login = () => {
         auth emails
       </button>
       <div className="container">
-        <h1>Login</h1>
+        <h1>Sign Up </h1>
         <form onSubmit={HandleSubmit}>
           <input type="email" name="" id="" />
           <br />
           <input type="password" />
           <button type="submit">Submit</button>
+        </form>
+      </div>
+      <div className="login-form">
+        <h1>Login</h1>
+        <form onClick={handleLogin}>
+          <input type="email" name="" id="" />
+          <br />
+          <input type="password" name="" id="" />
+          <button type="submit">Login</button>
         </form>
       </div>
     </>
