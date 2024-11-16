@@ -2,15 +2,26 @@ import React from "react";
 import { useEffect } from "react";
 import { auth, db } from "../../firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
-import { getDoc, collection, where } from "firebase/firestore";
+import {
+  getDoc,
+  collection,
+  where,
+  query,
+  onSnapshot,
+} from "firebase/firestore";
 
 const Home = () => {
   const [user, loading, error] = useAuthState(auth);
 
   const userQuery = async () => {
     const UserCollectionRef = collection(db, "users1");
-    const query = UserCollectionRef(where("UserEmail" === user.email));
-    console.log(query);
+    const q = query(
+      UserCollectionRef,
+      where("UserEmail", "==", "schwitz6969@gmail.com")
+    );
+    const unsub = await onSnapshot(q, (querySnapshot) => {
+      console.log(querySnapshot);
+    });
   };
 
   useEffect(() => {
